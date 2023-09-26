@@ -1,5 +1,7 @@
 package com.zmm.zjob.core;
 
+import com.zmm.zjob.core.db.IZJobDB;
+import com.zmm.zjob.core.db.SimpleJobDB;
 import com.zmm.zjob.core.execute.IZJobExecutor;
 import com.zmm.zjob.core.execute.SimpleExecutor;
 import com.zmm.zjob.core.schedule.IZJobScheduler;
@@ -12,8 +14,10 @@ public class ZJobManager {
 
     private final IZJobScheduler DEFAULT_SCHEDULER = new SimpleScheduler();
     private final IZJobExecutor DEFAULT_EXECUTOR = new SimpleExecutor();
+    private final IZJobDB DEFAULT_DB = new SimpleJobDB();
     private IZJobScheduler scheduler;
     private IZJobExecutor executor;
+    private IZJobDB jobDB;
 
     public ZJobManager() {
         init();
@@ -47,6 +51,8 @@ public class ZJobManager {
         ServiceLoader<IZJobExecutor> executors = ServiceLoader.load(IZJobExecutor.class);
         Iterator<IZJobExecutor> executorsIterator = executors.iterator();
         executor = executorsIterator.hasNext() ? executorsIterator.next() : DEFAULT_EXECUTOR;
+
+        // job db
     }
 
     private void loadData() {
