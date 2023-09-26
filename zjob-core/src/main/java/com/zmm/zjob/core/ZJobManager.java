@@ -6,22 +6,29 @@ import com.zmm.zjob.core.schedule.IZJobScheduler;
 import com.zmm.zjob.core.schedule.SimpleScheduler;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.ServiceLoader;
 
 public class ZJobManager {
 
+    private final ZJobConfig DEFAULT_CONFIG = new ZJobConfig();
     private final IZJobScheduler DEFAULT_SCHEDULER = new SimpleScheduler();
     private final IZJobExecutor DEFAULT_EXECUTOR = new SimpleExecutor();
+    private ZJobConfig baseConfig;
     private IZJobScheduler scheduler;
     private IZJobExecutor executor;
 
     public ZJobManager() {
-        init();
+        init(DEFAULT_CONFIG);
     }
 
-    public void init() {
+    public ZJobManager(ZJobConfig baseConfig) {
+        init(baseConfig);
+    }
+
+    public void init(ZJobConfig baseConfig) {
         // read base config
-        readConfig();
+        readConfig(baseConfig);
 
         // init core component
         initCoreComponents();
@@ -33,7 +40,10 @@ public class ZJobManager {
         start();
     }
 
-    private void readConfig() {
+    private void readConfig(ZJobConfig baseConfig) {
+        if (Objects.isNull(baseConfig)) {
+            baseConfig = new ZJobConfig();
+        }
 
     }
 
