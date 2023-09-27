@@ -1,7 +1,5 @@
 package com.zmm.zjob.core;
 
-import com.zmm.zjob.core.db.IZJobDB;
-import com.zmm.zjob.core.db.SimpleJobDB;
 import com.zmm.zjob.core.execute.IZJobExecutor;
 import com.zmm.zjob.core.execute.SimpleExecutor;
 import com.zmm.zjob.core.schedule.IZJobScheduler;
@@ -13,24 +11,14 @@ import java.util.ServiceLoader;
 
 public class ZJobManager {
 
-    private final ZJobConfig DEFAULT_CONFIG = new ZJobConfig();
-    private final IZJobScheduler DEFAULT_SCHEDULER = new SimpleScheduler();
-    private final IZJobExecutor DEFAULT_EXECUTOR = new SimpleExecutor();
-    private final IZJobDB DEFAULT_DB = new SimpleJobDB();
-    private ZJobConfig baseConfig;
-    private IZJobScheduler scheduler;
-    private IZJobExecutor executor;
-    private IZJobDB jobDB;
+    private static final ZJobConfig DEFAULT_CONFIG = new ZJobConfig();
+    private static final IZJobScheduler DEFAULT_SCHEDULER = new SimpleScheduler();
+    private static final IZJobExecutor DEFAULT_EXECUTOR = new SimpleExecutor();
+    private static ZJobConfig baseConfig;
+    private static IZJobScheduler scheduler;
+    private static IZJobExecutor executor;
 
-    public ZJobManager() {
-        init(DEFAULT_CONFIG);
-    }
-
-    public ZJobManager(ZJobConfig baseConfig) {
-        init(baseConfig);
-    }
-
-    public void init(ZJobConfig baseConfig) {
+    public static void init(ZJobConfig baseConfig) {
         // read base config
         readConfig(baseConfig);
 
@@ -44,14 +32,14 @@ public class ZJobManager {
         start();
     }
 
-    private void readConfig(ZJobConfig baseConfig) {
+    private static void readConfig(ZJobConfig baseConfig) {
         if (Objects.isNull(baseConfig)) {
             baseConfig = new ZJobConfig();
         }
 
     }
 
-    private void initCoreComponents() {
+    private static void initCoreComponents() {
         // scheduler
         ServiceLoader<IZJobScheduler> schedulers = ServiceLoader.load(IZJobScheduler.class);
         Iterator<IZJobScheduler> schedulersIterator = schedulers.iterator();
@@ -65,15 +53,27 @@ public class ZJobManager {
         // job db
     }
 
-    private void loadData() {
+    private static void loadData() {
 
     }
 
-    private void start() {
+    private static void start() {
 
     }
 
-    public void stop() {
+    public static ZJobConfig getBaseConfig() {
+        return baseConfig;
+    }
+
+    public static IZJobScheduler getScheduler() {
+        return scheduler;
+    }
+
+    public static IZJobExecutor getExecutor() {
+        return executor;
+    }
+
+    public static void stop() {
 
     }
 }
